@@ -32,7 +32,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'discord.App'
+    mainClass = 'com.paulhan.discord.App'
 }
 
 tasks.named('test') {
