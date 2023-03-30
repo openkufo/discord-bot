@@ -3,53 +3,34 @@
  */
 package com.paulhan.discord;
 
-import java.util.Arrays;
-
 import javax.security.auth.login.LoginException;
 
+import com.paulhan.discord.commands.MinecraftServer;
 import com.paulhan.discord.config.PropertiesReader;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.ActivityFlag;
-import net.dv8tion.jda.api.entities.Activity.ActivityType;
-import net.dv8tion.jda.api.entities.channel.ChannelType;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class App extends ListenerAdapter {
-
+    public static Process SERVER_PROCESS = null;
     public static void main(String[] args) throws LoginException, InterruptedException
     {
         JDA jda = JDABuilder.createDefault(PropertiesReader.getProperty("DISCORD_TOKEN"))
                             .enableIntents(GatewayIntent.MESSAGE_CONTENT)
-                            .setStatus(OnlineStatus.UNKNOWN)
+                            .setStatus(OnlineStatus.ONLINE)
                             .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                             .setBulkDeleteSplittingEnabled(false)
                             .setActivity(Activity.listening("목소리"))
                             .build();
                 // .enableIntents(GatewayIntent.MESSAGE_CONTENT) // enables explicit access to message.getContentDisplay()
-        jda.addEventListener(new App());
+        jda.addEventListener(new MinecraftServer());
         // jda.awaitReady();
     }
 
-    @Override
-    public void onMessageReceived(MessageReceivedEvent event)
-    {
-        if (event.isFromType(ChannelType.PRIVATE))
-        {
-            System.out.printf("[PM] %s: %s\n", event.getAuthor().getName(),
-                                    event.getMessage().getContentDisplay());
-        }
-        else
-        {
-            System.out.printf("[%s][%s] %s: %s\n", event.getGuild().getName(),
-                        event.getChannel().getName(), event.getMember().getEffectiveName(),
-                        event.getMessage().getContentDisplay());
-        }
-    }
+    
 }
