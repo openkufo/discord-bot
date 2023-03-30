@@ -3,17 +3,23 @@
  */
 package com.paulhan.discord;
 
+import java.util.Arrays;
+
 import javax.security.auth.login.LoginException;
 
 import com.paulhan.discord.config.PropertiesReader;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.ActivityFlag;
+import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class App extends ListenerAdapter {
 
@@ -21,15 +27,12 @@ public class App extends ListenerAdapter {
     {
         JDA jda = JDABuilder.createDefault(PropertiesReader.getProperty("DISCORD_TOKEN"))
                             .enableIntents(GatewayIntent.MESSAGE_CONTENT)
-                            // .enableIntents(GatewayIntent.GUILD_MESSAGES)
-                            // .setStatus(OnlineStatus.ONLINE)
-                            // .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                            // .setBulkDeleteSplittingEnabled(false)
-                            
-                            .setActivity(Activity.playing("실험중"))
+                            .setStatus(OnlineStatus.UNKNOWN)
+                            .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
+                            .setBulkDeleteSplittingEnabled(false)
+                            .setActivity(Activity.listening("목소리"))
                             .build();
                 // .enableIntents(GatewayIntent.MESSAGE_CONTENT) // enables explicit access to message.getContentDisplay()
-                
         jda.addEventListener(new App());
         // jda.awaitReady();
     }
