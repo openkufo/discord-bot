@@ -10,26 +10,19 @@ import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 
 public class ChatGpt {
-    public static String generate(){
+    public static String generate(String userQuestion){
         OpenAiService service = new OpenAiService(PropertiesReader.getProperty("OPENAI_TOKEN"));
         
         CompletionRequest completionRequest = CompletionRequest.builder()
-                .prompt("바울:1+1과 2+2를 더하면 답은 뭐야?")
+                .prompt(userQuestion)
                 .model("text-davinci-003")
-                .temperature(1D)
-                .maxTokens(50)
+                .temperature(0D)
+                .maxTokens(100)
                 .topP(1D)
-                .frequencyPenalty(0D)
-                .presencePenalty(0D)
-                .bestOf(1)                
+                .bestOf(1)
                 .build();
         List<CompletionChoice> serviceList = service.createCompletion(completionRequest).getChoices();
-        serviceList.forEach(System.out::println);
 
-        // System.out.println("serviceList start --");
-        // System.out.println(serviceList.toString());
-        // System.out.println("serviceList end --");
-        
-        return "";
+        return serviceList.get(0).getText().trim();
     }
 }

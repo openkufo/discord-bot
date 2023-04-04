@@ -30,8 +30,12 @@ public class App {
         //                     .build();
         //         // .enableIntents(GatewayIntent.MESSAGE_CONTENT) // enables explicit access to message.getContentDisplay()
         // jda.addEventListener(new MinecraftServer());
+        String test = "내 이름이 뭔지 알아?";
+        String gpt = ChatGpt.generate(test);
+        System.out.println(gpt);
+        System.out.println(gpt.trim());
         
-        ChatGpt.generate();
+        // ChatGpt.generate();
         // jda.awaitReady();
     }
 
