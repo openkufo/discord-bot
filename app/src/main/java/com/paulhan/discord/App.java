@@ -3,37 +3,43 @@
  */
 package com.paulhan.discord;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.security.auth.login.LoginException;
 
+import com.paulhan.discord.commands.ChatGptAdapter;
 import com.paulhan.discord.commands.MinecraftServer;
 import com.paulhan.discord.config.PropertiesReader;
-import com.paulhan.discord.openai.ChatGpt;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class App {
     public static Process SERVER_PROCESS = null;
+    public static String OWNER = "한바울";
+    public static Map<String, Integer> userMap = new HashMap<>();
+    
     public static void main(String[] args) throws LoginException, InterruptedException
     {
-        // JDA jda = JDABuilder.createDefault(PropertiesReader.getProperty("DISCORD_TOKEN"))
-        //                     .enableIntents(GatewayIntent.MESSAGE_CONTENT)
-        //                     .setStatus(OnlineStatus.ONLINE)
-        //                     .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-        //                     .setBulkDeleteSplittingEnabled(false)
-        //                     .setActivity(Activity.listening("목소리"))
-        //                     .build();
-        //         // .enableIntents(GatewayIntent.MESSAGE_CONTENT) // enables explicit access to message.getContentDisplay()
-        // jda.addEventListener(new MinecraftServer());
-        String test = "내 이름이 뭔지 알아?";
-        String gpt = ChatGpt.generate(test);
-        System.out.println(gpt);
-        System.out.println(gpt.trim());
+        JDA jda = JDABuilder.createDefault(PropertiesReader.getProperty("DISCORD_TOKEN"))
+                            .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                            .setStatus(OnlineStatus.ONLINE)
+                            .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
+                            .setBulkDeleteSplittingEnabled(false)
+                            .setActivity(Activity.listening("목소리"))
+                            .build();
+                // .enableIntents(GatewayIntent.MESSAGE_CONTENT) // enables explicit access to message.getContentDisplay()
+        jda.addEventListener(new MinecraftServer());
+        jda.addEventListener(new ChatGptAdapter());
+        // String test = "내 이름이 뭔지 알아?";
+        // String gpt = ChatGpt.generate(test);
+        // System.out.println(gpt);
+        // System.out.println(gpt.trim());
         
         // ChatGpt.generate();
         // jda.awaitReady();
